@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 
+void print_optimal_parens(int i, int j, unsigned int** s);
 
 int main() {
   int N;
@@ -28,7 +30,18 @@ int main() {
   getchar(); // consume the newline character left by scanf
 
   unsigned int m[N][N];
-  unsigned int s[N][N];
+  unsigned int** s = malloc(N * sizeof(unsigned int*));
+  if (!s) {
+    perror("malloc");
+    return 1;
+  }
+  for (int i = 0; i < N; i++) {
+    s[i] = malloc(N * sizeof(unsigned int));
+    if (!s[i]) {
+      perror("malloc");
+      return 1;
+    }
+  }
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
       m[i][j] = 0;
@@ -68,6 +81,26 @@ int main() {
   }
 
   printf("Minimum number of multiplications is %u\n", m[0][N - 1]);
+  printf("Optimal parenthesization:\n");
+  print_optimal_parens(0, N - 1, s);
+  printf("\n");
+
+  for (int i = 0; i < N; i++) {
+    free(s[i]);
+  }
+  free(s);
 
   return 0;
+}
+
+void print_optimal_parens(int i, int j, unsigned int** s) {
+  if (i == j) {
+    printf("A%d", i + 1);
+  } else {
+    printf("(");
+    print_optimal_parens(i, s[i][j], s);
+    printf(" x ");
+    print_optimal_parens(s[i][j] + 1, j, s);
+    printf(")");
+  }
 }
