@@ -66,9 +66,9 @@ int main() {
 
           if (show_steps) {
             printf("--------------------\n");
-            for (int i = 0; i < N; i++) {
-              for (int j = 0; j < N; j++) {
-                printf("%u\t", m[i][j]);
+            for (int line = 0; line < N; line++) {
+              for (int column = 0; column < N; column++) {
+                printf("%u\t", m[line][column]);
               }
               printf("\n");
             }
